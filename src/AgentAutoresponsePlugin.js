@@ -1,11 +1,11 @@
-import { FlexPlugin } from 'flex-plugin';
+import { FlexPlugin } from '@twilio/flex-plugin';
 import React from 'react';
 import CannedResponses from './components/CannedResponses';
 
 const PLUGIN_NAME = 'AgentAutoresponsePlugin';
 
 export default class AgentAutoresponsePlugin extends FlexPlugin {
-  constructor() {
+  constructor () {
     super(PLUGIN_NAME);
   }
 
@@ -16,20 +16,20 @@ export default class AgentAutoresponsePlugin extends FlexPlugin {
    * @param flex { typeof import('@twilio/flex-ui') }
    * @param manager { import('@twilio/flex-ui').Manager }
    */
-  init(flex, manager) {
+  async init(flex, manager) {
 
-    flex.MessageInput.Content.add(<CannedResponses key="canned-responses" />);
+    flex.MessageInput.Content.add(<CannedResponses key="canned-responses" />, { sortOrder: -1, });
 
 
-    manager.chatClient.on('channelJoined', (payload) => {
-      // define a message to send into the channel - alternatively you could look it up here
+    // manager.chatClient.on('channelJoined', (payload) => {
+    //   // define a message to send into the channel - alternatively you could look it up here
 
-      let body = `Hi! I'm ${manager.workerClient.attributes.full_name} and this is our predefined message.`;
+    //   let body = `Hi! I'm ${manager.workerClient.attributes.full_name} and this is our predefined message.`;
 
-      flex.Actions.invokeAction('SendMessage', {
-        channelSid: payload.sid,
-        body: body
-      });
-    });
+    //   flex.Actions.invokeAction('SendMessage', {
+    //     channelSid: payload.sid,
+    //     body: body
+    //   });
+    // });
   }
 }
