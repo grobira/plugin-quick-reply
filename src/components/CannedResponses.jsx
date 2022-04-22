@@ -9,7 +9,7 @@ import MenuItem from '@material-ui/core/MenuItem';
 import { CannedResponsesStyles } from './CannedResponses.Styles';
 
 const templates = [
-  "Oi, meu nome é {agentName} e vou seguir com o seu atendimento.",
+  "Oi, meu nome é {agentName} e vou seguir com o seu atendimento. {agentEmail}",
   "Oi, meu nome é {agentName} e vou seguir com o seu atendimento. Você poderia enviar os 3 primeiros digitos do seu CPF?",
   "Obrigado, tenha um bom dia"
 ]
@@ -41,14 +41,31 @@ class CannedResponses extends React.Component {
     this.setState({ hidden : !this.state.hidden, icon: this.state.icon === 'ArrowUp' ? "ArrowDown": "ArrowUp" });
   }
 
+
   processMessage = (messageIndex) => {
-    const [agentName, ] =  Manager.getInstance().workerClient.attributes.full_name.split(" ")
-    return templates[messageIndex].replaceAll("{agentName}", agentName)
+
+    let message = templates[messageIndex]
+    const transformations = [
+      (msg) => {
+        const [agentName, ] =  Manager.getInstance().workerClient.attributes.full_name.split(" ")
+        return msg.replaceAll("{agentName}", agentName)
+      },
+      (msg) => {
+        const email =  Manager.getInstance().workerClient.attributes.email
+        return msg.replaceAll("{agentEmail}", email)
+      }
+    ]
+
+    transformations.forEach( transformation => {
+      message = transformation(message)
+    })
+
+    return message
   }
 
   render() {
     return (
-      <CannedResponsesStyles>
+      <CannedResponsesStyles >
         <Button className='templateButton' onClick={this.handleClick} ><Icon className='icon' icon={this.state.icon}/></Button>
         { !this.state.hidden && <FormControl className="form">
           <InputLabel className="input-label" htmlFor="response">Respostas Rápidas</InputLabel>

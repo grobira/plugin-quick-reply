@@ -19,8 +19,6 @@ export const CannedResponsesStyles = styled('div')`
     font-size: 16px;
     margin: 1px 1px;
     border-radius: 50%;
-    width: 22px;
-    height: 24px;
-  }
 
+  }
 `;
