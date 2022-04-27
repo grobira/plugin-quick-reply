@@ -1,4 +1,5 @@
 import { FlexPlugin } from '@twilio/flex-plugin';
+import { MessageInput } from '@twilio/flex-ui';
 import React from 'react';
 import CannedResponses from './components/CannedResponses';
 
@@ -18,7 +19,7 @@ export default class AgentAutoresponsePlugin extends FlexPlugin {
    */
   async init(flex, manager) {
 
-    flex.MessageInput.Content.add(<CannedResponses key="canned-responses" />, { sortOrder: -1, });
+    flex.MessageInput.Content.add(<CannedResponses key="canned-responses" />, { sortOrder: -1 });
 
 
     // manager.chatClient.on('channelJoined', (payload) => {
